@@ -17,12 +17,18 @@ RESET=$(tput sgr0)
 
 echo -e "${BLUE}Starting Metahub PtokaX setup for Linux Laptop...${RESET}"
 echo -e "${YELLOW}Repository location assumed: ${METAHUB_DIR}${RESET}"
-if [ ! -d "${METAHUB_DIR}" ] || [ ! -f "${METAHUB_DIR}/ptokax-laptop-setup.sh" ]; then
-    echo -e "${RED}Error: Script not run from the correct directory or Metahub not found at ${METAHUB_DIR}.${RESET}"
-    echo -e "${RED}Please clone the repo to ${METAHUB_DIR} and run from there.${RESET}"
+
+SCRIPT_NAME=$(basename "$0") # Get the actual name of this script
+echo -e "${BLUE}Starting Metahub PtokaX setup for Linux Laptop using script: ${SCRIPT_NAME}...${RESET}" # Added script name here too
+echo -e "${YELLOW}Repository location assumed: ${METAHUB_DIR}${RESET}"
+# Check if the expected directory exists AND if this script file exists within it
+if [ ! -d "${METAHUB_DIR}" ] || [ ! -f "${METAHUB_DIR}/${SCRIPT_NAME}" ]; then
+    echo -e "${RED}Error: Script '${SCRIPT_NAME}' not found within the expected directory ${METAHUB_DIR}.${RESET}"
+    echo -e "${RED}Please ensure the repository is cloned to ${METAHUB_DIR} and run the script from within that directory.${RESET}"
     exit 1
 fi
-cd "${METAHUB_DIR}" # Ensure we are in the correct directory
+# Change directory to ensure relative paths work correctly later
+cd "${METAHUB_DIR}" || exit 1 # Added error check for cd
 
 # --- Detect Network Interface and IP Address ---
 echo -e "${GREEN}[+] ${BLUE}Detecting active network interface and IP address...${RESET}"
